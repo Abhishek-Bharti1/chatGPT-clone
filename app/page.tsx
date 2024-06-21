@@ -1,5 +1,4 @@
-
-import {BoltIcon, ExclamationTriangleIcon, SunIcon} from "@heroicons/react/24/outline";
+import { BoltIcon, ExclamationTriangleIcon, SunIcon } from "@heroicons/react/24/outline";
 
 export default function Home() {
   return (
@@ -25,7 +24,7 @@ export default function Home() {
           </div>
           <div className="space-y-2">
             <p className="infoText">Change the ChatGPT Model to use</p>
-            <p className="infoText">Messages are stored in Firebase's Firestore</p>
+            <p className="infoText">Messages are stored in Firebase&apos;s Firestore</p>
             <p className="infoText">Hot Toast notifications when ChatGPT is thinking!</p>
           </div>
         </div>
