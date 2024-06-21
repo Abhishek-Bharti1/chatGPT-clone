@@ -12,9 +12,9 @@ export default function Home() {
             <h2>Examples</h2>
           </div>
           <div className="space-y-2">
-            <p className="infoText">"Explain Something to me"</p>
-            <p className="infoText">"What is a difference between a dog and a cat?"</p>
-            <p className="infoText">"What is the color of the sun?"</p>
+            <p className="infoText">Explain Something to me</p>
+            <p className="infoText">What is a difference between a dog and a cat?</p>
+            <p className="infoText">What is the color of the sun?</p>
           </div>
         </div>
 
