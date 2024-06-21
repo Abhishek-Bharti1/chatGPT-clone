@@ -4,6 +4,7 @@ import React, { FormEvent, useState } from "react";
 import { useSession } from "next-auth/react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase";
+import toast from "react-hot-toast";
 type Props = {
   chatId: string;
 };
@@ -16,11 +17,14 @@ const ChatInput = ({ chatId }: Props) => {
 
   const generateResponse = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!prompt || !session) {
+    
+    if (!prompt) {
       return;
     }
+  
     const input = prompt.trim();
     setPrompt("");
+  
     const message: Message = {
       text: input,
       createdAt: serverTimestamp(),
@@ -30,37 +34,47 @@ const ChatInput = ({ chatId }: Props) => {
         avatar: session?.user?.image!,
       },
     };
-    await addDoc(
-      collection(
-        db,
-        "users",
-        session?.user?.email!,
-        "chats",
-        chatId,
-        "messages"
-      ),
-      message
-    );
-    //Toast notification loading
-
-    await fetch("/api/askQuestion", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        prompt: input,
-        chatId,
-        model,
-        session,
-      }),
-    }).then((res)=>{
-//Toast.success(res)
-    });
+  
+    try {
+      await addDoc(
+        collection(
+          db,
+          "users",
+          session?.user?.email!,
+          "chats",
+          chatId,
+          "messages"
+        ),
+        message
+      );
+  
+      const notification = toast.loading("ChatGPT is thinking...");
+  
+      await fetch("/api/askQuestion", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt: input,
+          chatId,
+          model,
+          session,
+        }),
+      });
+  
+      toast.success("ChatGPT has responded!", {
+        id: notification,
+      });
+    } catch (error) {
+      toast.error("Something went wrong!");
+      console.error("Error generating response:", error);
+    }
   };
+  
   return (
     <div className="bg-gray-700/50 text-gray-400 rounded-lg text-sm">
-      <form className="p-5 space-x-5 flex" onSubmit={(e) => generateResponse}>
+      <form className="p-5 space-x-5 flex" onSubmit={generateResponse}>
         <input
           type="text"
           placeholder="Type your message here..."

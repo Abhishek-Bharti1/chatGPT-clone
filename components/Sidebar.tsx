@@ -19,7 +19,7 @@ const Sidebar = () => {
           <NewChat />
           <div>{/* Model Selection */}</div>
           {/* Chat rows are */}
-          {chats?.docs.map((chat) => (
+          {chats?.docs.map((chat:any) => (
             <ChatRow key={chat.id} id={chat.id} />
           ))}
         </div>
